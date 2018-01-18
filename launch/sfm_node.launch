@@ -1,0 +1,9 @@
+<launch>
+
+<node name="sfm1" pkg="obstacle_detection" type="sfm_node" output="screen">
+
+	<param name="camera_topic" value="camera/image_rect" />
+
+</node>
+
+</launch>
