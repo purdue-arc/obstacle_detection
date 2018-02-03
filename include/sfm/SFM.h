@@ -36,13 +36,28 @@
 
 #include <Eigen/Core>
 
+#include "Frame.h"
+
 class SFM {
 public:
 	SFM();
 	virtual ~SFM();
 
+	struct Frame{
+		cv::Mat img;
+		cv::Mat_<float> image_K;
+		ros::Time time;
+
+	};
+
+	tf::TransformListener* tf_listener;
 
 	void camera_callback(const sensor_msgs::ImageConstPtr& img, const sensor_msgs::CameraInfoConstPtr& cam);
+	void image_processing(cv::Mat temp,);
+	void feature_tracking(Frame& old_im, Frame& new_im);
+
+	std::deque<Frame> images;
+
 };
 
 #endif /* OBSTACLE_DETECTION_INCLUDE_SFM_SFM_H_ */

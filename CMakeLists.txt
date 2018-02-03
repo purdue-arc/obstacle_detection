@@ -52,11 +52,14 @@ catkin_package(
 ## Build ##
 ###########
 
-add_library(sfm_config include/sfm/Config.h)
-set_target_properties(sfm_config PROPERTIES LINKER_LANGUAGE CXX)
+add_library(sfm_config include/sfm/Config.cpp)
+target_link_libraries(sfm_config ${catkin_LIBRARIES})
+
+add_library(sfm_frame include/sfm/Frame.h)
+target_link_libraries(sfm_frame ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} ${Eigen_LIBRARIES} sfm_config)
 
 add_library(sfmlib include/sfm/SFM.cpp)
-target_link_libraries(sfmlib ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} ${Eigen_LIBRARIES} sfm_config)
+target_link_libraries(sfmlib ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} ${Eigen_LIBRARIES} sfm_config sfm_frame)
 
 add_executable(sfm_node src/sfm_node.cpp)
 target_link_libraries(sfm_node ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} ${sophus_LIBRARIES} sfmlib)
