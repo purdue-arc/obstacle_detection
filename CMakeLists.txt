@@ -55,7 +55,7 @@ catkin_package(
 add_library(sfm_config include/sfm/Config.cpp)
 target_link_libraries(sfm_config ${catkin_LIBRARIES})
 
-add_library(sfm_frame include/sfm/Frame.h)
+add_library(sfm_frame include/sfm/Frame.cpp)
 target_link_libraries(sfm_frame ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} ${Eigen_LIBRARIES} sfm_config)
 
 add_library(sfmlib include/sfm/SFM.cpp)

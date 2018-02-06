@@ -2,8 +2,10 @@
 
 <node name="sfm1" pkg="obstacle_detection" type="sfm_node" output="screen">
 
-	<param name="camera_topic" value="camera/image_rect" />
+	<param name="camera_topic" value="bottom_camera/image_rect" />
 
 </node>
+
+<node name="image_proc" pkg="image_proc" type="image_proc" ns="bottom_camera"/>
 
 </launch>

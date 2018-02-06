@@ -1,12 +1,12 @@
 /*
- * Frames.h
+ * Feature.h
  *
- *  Created on: Jan 29, 2018
+ *  Created on: Feb 2, 2018
  *      Author: jason
  */
 
-#ifndef OBSTACLE_DETECTION_INCLUDE_SFM_FRAME_H_
-#define OBSTACLE_DETECTION_INCLUDE_SFM_FRAME_H_
+#ifndef OBSTACLE_DETECTION_INCLUDE_SFM_FEATURE_H_
+#define OBSTACLE_DETECTION_INCLUDE_SFM_FEATURE_H_
 #include <ros/ros.h>
 
 #include <sfm/Config.h>
@@ -32,19 +32,18 @@
 
 #include <image_transport/image_transport.h>
 #include <cv_bridge/cv_bridge.h>
-
 namespace std {
 
-class Frame {
+class Feature {
 public:
-	Frame();
-	virtual ~Frame();
-		tf::TransformListener* tf_listener;
-		cv::Size image_size;
-		cv::Mat_<float> image_K;
-		cv::Mat img;
+	Feature();
+	virtual ~Feature();
+	Frame og_image;
+	cv::Mat patch;
+
+
 };
 
 } /* namespace std */
 
-#endif /* OBSTACLE_DETECTION_INCLUDE_SFM_FRAME_H_ */
+#endif /* OBSTACLE_DETECTION_INCLUDE_SFM_FEATURE_H_ */

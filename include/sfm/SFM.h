@@ -53,7 +53,7 @@ public:
 	tf::TransformListener* tf_listener;
 
 	void camera_callback(const sensor_msgs::ImageConstPtr& img, const sensor_msgs::CameraInfoConstPtr& cam);
-	void image_processing(cv::Mat temp,);
+	void feature_detection(cv::Mat temp);
 	void feature_tracking(Frame& old_im, Frame& new_im);
 
 	std::deque<Frame> images;
