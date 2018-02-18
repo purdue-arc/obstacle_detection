@@ -6,11 +6,9 @@
  */
 
 #include "Feature.h"
-
-namespace std {
+#include "Frame.h"
 
 Feature::Feature() {
-	// TODO Auto-generated constructor stub
 
 }
 
@@ -18,4 +16,3 @@ Feature::~Feature() {
 	// TODO Auto-generated destructor stub
 }
 
-} /* namespace std */

@@ -32,18 +32,18 @@
 
 #include <image_transport/image_transport.h>
 #include <cv_bridge/cv_bridge.h>
-namespace std {
+
+
 
 class Feature {
 public:
 	Feature();
 	virtual ~Feature();
-	Frame og_image;
-	cv::Mat patch;
+
+	cv::Point2f px;
 
 
 };
 
-} /* namespace std */
 
 #endif /* OBSTACLE_DETECTION_INCLUDE_SFM_FEATURE_H_ */

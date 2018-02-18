@@ -35,7 +35,7 @@
 #include <cv_bridge/cv_bridge.h>
 
 #include <Eigen/Core>
-
+#include "Feature.h"
 #include "Frame.h"
 
 class SFM {
@@ -43,19 +43,17 @@ public:
 	SFM();
 	virtual ~SFM();
 
-	struct Frame{
-		cv::Mat img;
-		cv::Mat_<float> image_K;
-		ros::Time time;
 
-	};
 
 	tf::TransformListener* tf_listener;
 
 	void camera_callback(const sensor_msgs::ImageConstPtr& img, const sensor_msgs::CameraInfoConstPtr& cam);
 	void feature_detection(cv::Mat temp);
 	void feature_tracking(Frame& old_im, Frame& new_im);
-
+	void feature_replenish(cv::Mat last_img, cv::Mat cur_img);
+	void feature_update(cv::Mat last_img, cv::Mat cur_img);
+	void feature_view(cv::Mat temp);
+	std::vector<Feature> features;
 	std::deque<Frame> images;
 
 };

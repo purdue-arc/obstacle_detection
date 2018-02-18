@@ -33,7 +33,8 @@
 #include <image_transport/image_transport.h>
 #include <cv_bridge/cv_bridge.h>
 
-namespace std {
+#include <sfm/Feature.h>
+
 
 class Frame {
 public:
@@ -43,8 +44,8 @@ public:
 		cv::Size image_size;
 		cv::Mat_<float> image_K;
 		cv::Mat img;
+		std::vector<Feature> features;
 };
 
-} /* namespace std */
 
 #endif /* OBSTACLE_DETECTION_INCLUDE_SFM_FRAME_H_ */
