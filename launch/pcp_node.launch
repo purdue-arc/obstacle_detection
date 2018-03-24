@@ -1,0 +1,10 @@
+<launch>
+
+<node name="pcp1" pkg="obstacle_detection" type="pcp_node" output="screen"> 
+	
+	<!--<param name="stereo_cam_topic" value="points2" />-->
+
+</node>
+
+
+</launch>

@@ -14,10 +14,11 @@ find_package(catkin REQUIRED COMPONENTS
   tf
   cv_bridge
   image_transport
+  pcl_conversions
 )
 
 find_package(OpenCV REQUIRED)
-
+find_package(PCL REQUIRED)
 find_package(Eigen3 REQUIRED)
 
 include_directories(
@@ -28,8 +29,11 @@ include_directories(
 	${catkin_INCLUDE_DIRS}
 	${Eigen_INCLUDE_DIRS}
 	${sophus_INCLUDE_DIRS}
+	${PCL_INCLUDE_DIRS}
 )
 
+link_directories(${PCL_LIBRARY_DIRS})
+add_definitions(${PCL_DEFINITIONS})
 
 ###################################
 ## catkin specific configuration ##
@@ -61,12 +65,23 @@ target_link_libraries(sfm_feature ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} ${Eige
 add_library(sfm_frame include/sfm/Frame.cpp)
 target_link_libraries(sfm_frame ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} ${Eigen_LIBRARIES} sfm_config sfm_feature)
 
+add_library(sfm_pcloudproc include/sfm/PCloudProc.cpp)
+target_link_libraries(sfm_pcloudproc ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} ${Eigen_LIBRARIES} ${PCL_LIBRARIES} sfm_config sfm_frame sfm_feature)
 
 add_library(sfmlib include/sfm/SFM.cpp)
-target_link_libraries(sfmlib ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} ${Eigen_LIBRARIES} sfm_config sfm_frame sfm_feature)
+target_link_libraries(sfmlib ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} ${Eigen_LIBRARIES} sfm_config sfm_frame sfm_feature sfm_pcloudproc)
+
+##add_library(sfmlib include/sfm/PCloudProc.cpp)
+##target_link_libraries(sfmlib ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} ${Eigen_LIBRARIES} ${PCL_LIBRARIES} sfm_config sfm_frame sfm_feature)
 
 add_executable(sfm_node src/sfm_node.cpp)
 target_link_libraries(sfm_node ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} ${sophus_LIBRARIES} sfmlib)
+
+add_executable(euroc_dataset_fixer src/euroc_dataset_node.cpp)
+target_link_libraries(euroc_dataset_fixer ${catkin_LIBRARIES})
+
+add_executable(pcp_node src/pcp_node.cpp)
+target_link_libraries (pcp_node ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} ${sophus_LIBRARIES} ${PCL_LIBRARIES} sfmlib)
 
 #############
 ## Testing ##

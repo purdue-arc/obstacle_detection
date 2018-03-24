@@ -1,0 +1,22 @@
+<launch>
+	
+    <node name="euroc_dataset_fixer1" pkg="obstacle_detection" type="euroc_dataset_fixer" output="screen">
+    
+    </node>
+   
+    
+     <node pkg="stereo_image_proc" type="stereo_image_proc" name="stereo_image_proc" output="screen" >
+     	<param name="approximate_sync" value="true"/>
+      	<remap from="left/image_raw" to="cam0/image_raw"/>
+		<remap from="right/image_raw" to="cam1/image_raw"/>
+		<remap from="left/camera_info" to="cam0/camera_info"/>
+		<remap from="right/camera_info" to="cam1/camera_info"/>
+		<remap from="left/image_mono" to="cam0/image_mono"/>
+		<remap from="right/image_mono" to="cam1/image_mono"/>
+		<remap from="left/image_rect" to="cam0/image_rect"/>
+		<remap from="right/image_rect" to="cam1/image_rect"/>
+    </node>
+    
+    <node pkg="rviz" type="rviz" name="euroc_dataset_rviz"/>
+
+</launch>

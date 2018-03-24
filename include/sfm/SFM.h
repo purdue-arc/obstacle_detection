@@ -48,11 +48,11 @@ public:
 	tf::TransformListener* tf_listener;
 
 	void camera_callback(const sensor_msgs::ImageConstPtr& img, const sensor_msgs::CameraInfoConstPtr& cam);
-	void feature_detection(cv::Mat temp);
 	void feature_tracking(Frame& old_im, Frame& new_im);
 	void feature_replenish(cv::Mat last_img, cv::Mat cur_img);
 	void feature_update(cv::Mat last_img, cv::Mat cur_img);
 	void feature_view(cv::Mat temp);
+	//void getOdom(const nav_msgs::Odometry::ConstPtr& msg);
 	std::vector<Feature> features;
 	std::deque<Frame> images;
 

@@ -21,7 +21,7 @@ SFM::SFM() {
 	ros::param::param<int>("~max_features",MAX_FEATURES,D_MAX_FEATURES);
 	image_transport::ImageTransport it(nh);
 	image_transport::CameraSubscriber bottom_cam_sub = it.subscribeCamera(CAMERA_TOPIC, 10, &SFM::camera_callback, this);
-
+	//ros::Subscriber sub = nh.subscribe("/ground_truth/state",1000,getOdom);
 	ros::spin();
 
 }
@@ -35,7 +35,6 @@ void SFM::camera_callback(const sensor_msgs::ImageConstPtr& img,const sensor_msg
 	ros::Time start = ros::Time::now();
 	cv::Mat temp = cv_bridge::toCvShare(img, img->encoding)->image.clone();
 
-	ROS_INFO_STREAM("frame dt in ms: " << (ros::Time::now() - start).toSec() * 1000.0);
 
 	Frame image;
 	image.img=temp;
@@ -62,13 +61,12 @@ void SFM::camera_callback(const sensor_msgs::ImageConstPtr& img,const sensor_msg
 	cv::waitKey(30);
 	feature_view(temp);
 
+	ROS_INFO_STREAM("frame dt in ms: " << (ros::Time::now() - start).toSec() * 1000.0);
+
+
 
 }
 
-void SFM::feature_detection(cv::Mat temp){
-
-
-}
 
 void SFM::feature_update(cv::Mat last_img,cv::Mat cur_img){
 	std::vector<cv::Point2f> oldPoints;
@@ -106,11 +104,11 @@ void SFM::feature_replenish(cv::Mat last_img, cv::Mat cur_img){
 	cv::Canny(blurred_img, canny, CANNY_THRESH1, CANNY_THRESH2);
 
 
-	if(features.size()<MAX_FEATURES){										//If there are not enough features being tracked
+	//if(features.size()<MAX_FEATURES){										//If there are not enough features being tracked
 		cv::Mat checkImg = cv::Mat::zeros(img.size(), CV_8U); 				//Used to check for features that are too closed
 		for(auto e : features)
 		{
-			cv::circle(checkImg,e.px,sqrt((img.rows*img.cols)/MAX_FEATURES), cv::Scalar(255), cv::FILLED);
+			cv::circle(checkImg,e.px,2*sqrt((img.rows*img.cols)/MAX_FEATURES), cv::Scalar(255), cv::FILLED);
 		}
 
 		for(int i = 0;i<img.rows;i++){
@@ -123,7 +121,7 @@ void SFM::feature_replenish(cv::Mat last_img, cv::Mat cur_img){
 					feature.px.x = j;
 					feature.px.y = i;
 					features.push_back(feature);
-					cv::circle(checkImg,feature.px,sqrt((img.rows*img.cols)/MAX_FEATURES), cv::Scalar(255), cv::FILLED);
+					cv::circle(checkImg,feature.px,2*sqrt((img.rows*img.cols)/MAX_FEATURES), cv::Scalar(255), cv::FILLED);
 
 				}
 			}
@@ -132,10 +130,10 @@ void SFM::feature_replenish(cv::Mat last_img, cv::Mat cur_img){
 		ROS_INFO_STREAM("feature_size: " << features.size());
 		cv::imshow("canny", canny);
 		cv::waitKey(30);
-		cv::imshow("checkImg",checkImg);
-		cv::waitKey(30);
+		//cv::imshow("checkImg",checkImg);
+		//cv::waitKey(30);
 
-	}
+	//}
 	//do nothing if maximum feature is already satisfied
 }
 
@@ -145,7 +143,7 @@ void SFM::feature_view(cv::Mat img){
 	  // convert grayscale to color image
 	cv::cvtColor(img_gray, img_rgb, CV_GRAY2RGB);
 	for(auto e : features){
-		cv::drawMarker(img_rgb, e.px, cv::Scalar(255,0,0), cv::MARKER_SQUARE, sqrt((img.rows*img.cols)/MAX_FEATURES), 2);
+		cv::drawMarker(img_rgb, e.px, cv::Scalar(255,0,0), cv::MARKER_SQUARE, 2*sqrt((img.rows*img.cols)/MAX_FEATURES), 2);
 	}
 	cv::imshow("img_rgb",img_rgb);
 	cv::waitKey(30);
@@ -159,6 +157,12 @@ void SFM::feature_tracking(Frame& old_im,Frame& current_im){
 	cv::calcOpticalFlowPyrLK(old_im.img,current_im.img,oldPoints, nextPoints,status, err, cv::Size(21, 21), 3,cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS,30, 0.01));
 
 }
+/*
+void SFM::getOdom(const nav_msgs::Odometry::ConstPtr& msg){ //get pose from the ground_truth estimate
+	quaternion = msg->pose.pose.orientation;  // needs to
+	x_pos_current = msg->pose.pose.position.x;
+	y_pos_current = msg->pose.pose.position.y;
 
-
+}
+*/
 
