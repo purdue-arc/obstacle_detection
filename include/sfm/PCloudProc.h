@@ -79,6 +79,8 @@ public:
 	pcl::PCDWriter writer;
 	pcl::search::KdTree<pcl::PointXYZ>::Ptr tree;
 	pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_no_ground;
+	std::vector<Eigen::Vector4f> centroids;
+	Eigen::Vector4f centroid;
 };
 
 
